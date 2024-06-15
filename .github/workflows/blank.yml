@@ -12,7 +12,7 @@ jobs:
     if: contains( github.event.issue.labels.*.name, 'feedback')  # limits this workflow to only run on issues and comments with the label, cost saving measure
     steps:
     - name: Run the typescript action
-      uses: camunda/issue-sync-action
+      uses: camunda/issue-sync-action@1.8.8
       id: issue_sync
       with:
         repo_target: "omarcostahamido/feedback2"  # The target repository
