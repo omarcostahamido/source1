@@ -1,19 +1,63 @@
+name: issue-sync
+
 on:
   issues:
+    types: [closed, deleted, edited, labeled, opened, reopened, unlabeled]
   issue_comment:
+    types: [created, edited, deleted]  # if only_sync_main_issue: false
+
 jobs:
-  run:
+  issue-sync:
     runs-on: ubuntu-latest
-      # GITHUB_TOKEN: ${{ secrets.GH_TOKEN_FOR_BOTH_REPOS }}
-    env:
-      GITHUB_TOKEN: ${{ secrets.CTOKEN }}
+    if: contains( github.event.issue.labels.*.name, 'feedback')  # limits this workflow to only run on issues and comments with the label, cost saving measure
     steps:
-    - name: Issue sync action
-      uses: Maximisch/issue-sync-action@v2.0
+    - name: Run the typescript action
+      uses: camunda/issue-sync-action
+      id: issue_sync
       with:
-        target_repo: "omarcostahamido/feedback2" # The target repository
-        only_sync_on_label: "feedback" # Only syncs issues with this label set
-        # only_sync_main_issue: true # Excludes comments
+        repo_target: "omarcostahamido/feedback2"  # The target repository
+        only_sync_on_label: "feedback"  # Only syncs issues with this label set
+        only_sync_main_issue: false  # Sync comments in addition to the issue
+        # additional_issue_labels: "label1,label2"
+        target_issue_footer_template: '<sup>:robot: This issue is automatically synced from: [source]({{<link>}})</sup>'
+        target_comment_footer_template: '<sup>:robot: This comment from {{<author>}} is automatically synced from: [source]({{<link>}})</sup>'
+        skip_comment_sync_keywords: '[skip-sync],[private]'
+        issue_created_comment_template: |
+          A public reference has been created: {{<link>}}
+          **Notice**: comments after this one **are** synchronized with the public copy of the issue.
+        use_comment_for_issue_matching: true
+        target_issue_assignees_behavior: "add_source_author"
+      env:
+        GITHUB_TOKEN_SOURCE: ${{ secrets.GH_TOKEN_FOR_SOURCE }}
+        GITHUB_TOKEN_TARGET: ${{ secrets.GH_TOKEN_FOR_TARGET }}
+        GITHUB_TOKEN: ${{ secrets.CTOKEN }}
+        # alternatively, you can pass only GITHUB_TOKEN if it works for both source and target 
+    - run: |
+      echo "issue_id_target: ${{ steps.issue_sync.outputs.issue_id_target }}"
+      echo "comment_id_target: ${{ steps.issue_sync.outputs.comment_id_target }}"
+
+
+
+# on:
+#   issues:
+#   issue_comment:
+# jobs:
+#   run:
+#     runs-on: ubuntu-latest
+#       # GITHUB_TOKEN: ${{ secrets.GH_TOKEN_FOR_BOTH_REPOS }}
+#     env:
+#       GITHUB_TOKEN: ${{ secrets.CTOKEN }}
+#     steps:
+#     - name: Issue sync action
+#       # uses: Maximisch/issue-sync-action@v2.0
+#       uses: camunda/issue-sync-action@1.8.8
+#       with:
+#         target_repo: "omarcostahamido/feedback2" # The target repository
+#         only_sync_on_label: "feedback" # Only syncs issues with this label set
+#         # only_sync_main_issue: true # Excludes comments
+
+
+
 
 # # This is a basic workflow to help you get started with Actions
 
