@@ -28,8 +28,8 @@ jobs:
         use_comment_for_issue_matching: true
         target_issue_assignees_behavior: "add_source_author"
       env:
-        GITHUB_TOKEN_SOURCE: ${{ secrets.GH_TOKEN_FOR_SOURCE }}
-        GITHUB_TOKEN_TARGET: ${{ secrets.GH_TOKEN_FOR_TARGET }}
+        # GITHUB_TOKEN_SOURCE: ${{ secrets.GH_TOKEN_FOR_SOURCE }}
+        # GITHUB_TOKEN_TARGET: ${{ secrets.GH_TOKEN_FOR_TARGET }}
         GITHUB_TOKEN: ${{ secrets.CTOKEN }}
         # alternatively, you can pass only GITHUB_TOKEN if it works for both source and target 
     - run: |
