@@ -1,16 +1,17 @@
 on:
   issues:
   issue_comment:
-
-env:
-  # GITHUB_TOKEN: ${{ secrets.GH_TOKEN_FOR_BOTH_REPOS }}
-
-- name: Issue sync action
-  uses: Maximisch/issue-sync-action@v2.0
-  with:
-    target_repo: "omarcostahamido/feedback2" # The target repository
-    only_sync_on_label: "feedback" # Only syncs issues with this label set
-    # only_sync_main_issue: true # Excludes comments
+jobs:
+  run:
+    runs-on: ubuntu-latest
+      # GITHUB_TOKEN: ${{ secrets.GH_TOKEN_FOR_BOTH_REPOS }}
+    steps:
+    - name: Issue sync action
+      uses: Maximisch/issue-sync-action@v2.0
+      with:
+        target_repo: "omarcostahamido/feedback2" # The target repository
+        only_sync_on_label: "feedback" # Only syncs issues with this label set
+        # only_sync_main_issue: true # Excludes comments
 
 # # This is a basic workflow to help you get started with Actions
 
