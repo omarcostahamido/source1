@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
       # GITHUB_TOKEN: ${{ secrets.GH_TOKEN_FOR_BOTH_REPOS }}
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.CTOKEN }}
     steps:
     - name: Issue sync action
       uses: Maximisch/issue-sync-action@v2.0
